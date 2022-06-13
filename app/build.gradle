@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+def getVersionCode = { ->
+    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : Integer.MAX_VALUE
+    println "VersionCode is set to $code"
+    return code
+}
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.boiler.android.hello"
+        minSdk 24
+        targetSdk 32
+        versionCode getVersionCode()
+        versionName  System.env.APP_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+
+        release {
+            debuggable false
+            minifyEnabled true
+
+            resValue "string", "app_name", "boiler"
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+
+            resValue "string", "app_name", "staging boiler"
+
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-S"
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    flavorDimensions 'app'
+
+}
