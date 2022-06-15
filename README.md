@@ -219,3 +219,4 @@ Because of it we have to build several builds.
   - deploy_staging     - Step for build and deploy application to Firebase
   - deploy_prod        - Step for build and deploy application to Firebase and Google play
 ```
+
