@@ -17,7 +17,7 @@ RUN wget --quiet --output-document=android-sdk.zip "https://dl.google.com/androi
 RUN unzip -d ${ANDROID_HOME} android-sdk.zip
 RUN yes | ./android-sdk-linux/cmdline-tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" --sdk_root=android-sdk-linux/
 RUN yes | ./android-sdk-linux/cmdline-tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" --sdk_root=android-sdk-linux/
-##install Fastlane
+#install Fastlane
 COPY Gemfile .
 RUN gem install bundler
 RUN bundle install

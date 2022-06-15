@@ -19,6 +19,7 @@ env:
 
 jobs:
   prod_firebase:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository }}:latest
@@ -42,6 +43,7 @@ jobs:
           BUILD_TYPE: "release"
 
   google_play:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: [prod_firebase]
     runs-on: ubuntu-latest
     container:
