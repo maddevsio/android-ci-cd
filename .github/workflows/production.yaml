@@ -16,6 +16,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
+  CI_PIPELINE_ID: ${{ github.run_id }}
 
 jobs:
   prod_firebase:
