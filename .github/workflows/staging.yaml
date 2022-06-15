@@ -34,9 +34,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
-      - env:
+      - uses: actions/checkout@v3
+      - run: bundle exec fastlane firebase_distribution
+        env:
           FIREBASE_APP_ID:  ${{ secrets.FIREBASE_APP_ID_STG }}
           BUILD_TASK: "assemble"
           BUILD_TYPE: "debug"
-      - uses: actions/checkout@v3
-      - run: bundle exec fastlane firebase_distribution

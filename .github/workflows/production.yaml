@@ -33,16 +33,16 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
-      - env:
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
-          BUILD_TASK: "assemble"
-          BUILD_TYPE: "release"
       - uses: actions/checkout@v3
       - run: bundle exec fastlane firebase_distribution
       - uses: actions/upload-artifact@v2
         with:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
+        env:
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
+          BUILD_TASK: "assemble"
+          BUILD_TYPE: "release"
 
   google_play:
     needs: [prod_firebase]
@@ -53,11 +53,6 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
-      - env:
-          BUILD_TASK: "bundle"
-          BUILD_TYPE: "release"
-          SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}
-          APPROVERS:      ${{ APPROVERS}}
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v2
         with:
@@ -69,4 +64,9 @@ jobs:
       - run: |
                echo $SA_JSON_GP_KEY | base64 -d -i > key_gp.json
                ls -lah
+        env:
+          BUILD_TASK: "bundle"
+          BUILD_TYPE: "release"
+          SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}
+          APPROVERS:      ${{ APPROVERS}}
       #- run: bundle exec fastlane google_beta
