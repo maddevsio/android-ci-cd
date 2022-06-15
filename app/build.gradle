@@ -2,11 +2,13 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
-// def getVersionCode = { ->
-//     def code = project.hasProperty('versionCode') ? versionCode.toInteger() : Integer.MAX_VALUE
-//     println "VersionCode is set to $code"
-//     return code
-// }
+
+def getVersionCode = { ->
+    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : Integer.MAX_VALUE
+    println "VersionCode is set to $code"
+    return code
+}
+
 android {
     compileSdk 32
 
@@ -14,8 +16,7 @@ android {
         applicationId "com.boiler.android.hello"
         minSdk 24
         targetSdk 32
-        //versionCode getVersionCode()
-        versionCode System.env.CI_PIPELINE_ID
+        versionCode getVersionCode()
         versionName System.env.APP_VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
