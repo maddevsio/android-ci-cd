@@ -49,4 +49,3 @@ jobs:
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
               bundle exec fastlane firebase_distribution
-              KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
