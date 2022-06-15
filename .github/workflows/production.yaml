@@ -9,10 +9,10 @@ on:
 
 env:
   KEYSTORE_PW: ${{ secrets.KEYSTORE_PW }}
-  KEYSTORE:    ${{ secrets.KEYSTORE }}
+  KEYSTORE: ${{ secrets.KEYSTORE }}
   SA_JSON_KEY: ${{ secrets.SA_JSON_KEY }}
-  ALIAS:       ${{ secrets.ALIAS }}
-  ALIAS_PW:    ${{ secrets.ALIAS_PW }}
+  ALIAS: ${{ secrets.ALIAS }}
+  ALIAS_PW: ${{ secrets.ALIAS_PW }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
@@ -67,4 +67,4 @@ jobs:
           BUILD_TASK: "bundle"
           BUILD_TYPE: "release"
           SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}
-          APPROVERS:      ${{ secrets.APPROVERS }}
+          APPROVERS: ${{ secrets.APPROVERS }}
