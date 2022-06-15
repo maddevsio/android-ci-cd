@@ -1,0 +1,72 @@
+name: 'production'
+
+on:
+  workflow_run:
+    workflows: ['staging']
+    branches: [main]
+    types:
+      - completed
+
+env:
+  KEYSTORE_PW: ${{ secrets.KEYSTORE_PW }}
+  KEYSTORE:    ${{ secrets.KEYSTORE }}
+  SA_JSON_KEY: ${{ secrets.SA_JSON_KEY }}
+  ALIAS:       ${{ secrets.ALIAS }}
+  ALIAS_PW:    ${{ secrets.ALIAS_PW }}
+  SA_JSON_KEY: ${{ secrets.SA_JSON_KEY }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+  APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
+
+defaults:
+  run: |
+     echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
+     echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
+     echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+
+jobs:
+  prod_firebase:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - env:
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
+          BUILD_TASK: "assemble"
+          BUILD_TYPE: "release"
+      - uses: actions/checkout@v3
+      - run: bundle exec fastlane firebase_distribution
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/bundle/release/app-release.aab
+
+  google_play:
+    needs: [prod_firebase]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - env:
+          BUILD_TASK: "bundle"
+          BUILD_TYPE: "release"
+          SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}
+          APPROVERS:      ${{ APPROVERS}}
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v2
+        with:
+          name: app
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: $APPROVERS
+      - run: |
+               echo $SA_JSON_GP_KEY | base64 -d -i > key_gp.json
+               ls -lah
+      #- run: bundle exec fastlane google_beta
