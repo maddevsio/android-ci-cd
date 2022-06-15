@@ -15,7 +15,7 @@ android {
         minSdk 24
         targetSdk 32
         //versionCode getVersionCode()
-        versionCode 1000
+        versionCode System.env.CI_PIPELINE_ID
         versionName System.env.APP_VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
