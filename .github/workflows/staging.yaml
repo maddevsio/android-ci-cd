@@ -3,7 +3,7 @@ name: 'staging'
 on:
   workflow_run:
     workflows: ['lint and tests']
-    branches: [main]
+    branches: [feature/ci-cd]
     types:
       - completed
   workflow_dispatch:
