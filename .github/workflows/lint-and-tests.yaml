@@ -38,4 +38,3 @@ jobs:
       - run: |
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
               bundle exec fastlane assemble_unit_test
-      
