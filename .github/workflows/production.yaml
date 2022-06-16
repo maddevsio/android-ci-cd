@@ -46,7 +46,7 @@ jobs:
               ls -lah app/build/outputs/bundle/release/
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
-          BUILD_TASK: "assemble"
+          BUILD_TASK: "bundle"
           BUILD_TYPE: "release"
       - uses: actions/upload-artifact@v2
         with:
