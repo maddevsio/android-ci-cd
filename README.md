@@ -165,10 +165,10 @@ TODO
 | SLACK_WEBHOOK_URL |         ALL          |                                        Slack webhook |
 | FIREBASE_TESTER_GROUP_NAME |     STAGING/PROD     |                    Name of testers group in Firebase |
 | APPROVERS            |         ALL          |            List of approvers for google-play release |
+| CI_PIPELINE_ID       |         ALL          |                     Pipeline ID used for versionCode |
+| CI_COMMIT_BEFORE_SHA |         ALL          |              Previous commit, used for build changelog |
 
 > If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile.  
-
-> If you don't use environments in your pipeline, you need to add prefix in you variable STAGING_ or PROD_ for example and update environment variable pipeline and fastfile.
 
 * When you complete all this preparation you can start build and release application to Firebase
 
