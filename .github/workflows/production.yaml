@@ -21,7 +21,6 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   CI_PIPELINE_ID: ${{ github.run_number }}
   CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
-  APPROVERS: ${{ secrets.APPROVERS }}
 
 jobs:
   prod_firebase:
@@ -62,7 +61,7 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: $APPROVERS
+          approvers: ${{ secrets.APPROVERS }}
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v2
         with:
