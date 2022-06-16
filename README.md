@@ -1,5 +1,8 @@
 ## Android CI/CD boilerplate
 
+[![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
+[![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
+
 ### The purpose of this boilerplate
 
 * Mobile development just like any other development requires writing code. Development cycle include tests, build and deploy. In this case, we need to eliminate the human factor and saves developer time. 
@@ -55,12 +58,11 @@ We can automate the processes of testing, build and deployment of the ready appl
 
 1. Json file with configuration for Firebase 
 
-* You must add a json file with the firebase project settings to the environment variables.
+* You must add a json file with the firebase project settings encoded to base64 to the environment variable.
 > https://firebase.google.com/docs/android/setup - Step 3
 
 ```
 base64 google-services.json > firebase_setting
-cat firebase_setting
 ```
 
 2. Service account with access to Firebase
@@ -68,11 +70,10 @@ cat firebase_setting
 * Create Service Account for release application to Firebase
 > Choose your Firebase account --> Project Overview --> Project setting --> Service Account --> create service account 
 
-* Add SA key to environment variable encode it to base64 with command
+* Add SA key encoded to base64 to environment variable.
 
 ```
 base64 sa.json > key_firebase
-cat key_firebase
 ```
 
 3. Service account with access to Google play
@@ -80,27 +81,25 @@ cat key_firebase
 * Create Service Account for release application to Google play
 [goopleplay](docs/README_GOOGLE_PLAY.md)
 
-* Add SA key to environment variable encode it to base64 with command
+* Add SA key encoded to base64 to environment variable
 
 ```
 base64 google_play.json > google_play
-cat google_play
 ```
 
 4. Keystore for signing application
-* To sign an application, you need a key, which can be generated with the command
+* To sign an application, you need a key, which can be generated with the command.
 
 ```
 keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-* Add signing keystore to environment variable encode it to base64 with command
+* Add signing keystore encoded to base64 to environment variable.
 ```
 base64 my-release-key.keystore > keystore
-cat keystore
 ```
 
-##### Gitlab CI/CD
+##### Gitlab CI/CD 
 
 * We use `Environments` in our pipeline to divide our variables by environments, before you start please create 3 environment in gitlab-ci-cd: 
 
@@ -112,7 +111,12 @@ Gitlab --> Deployments --> Environment --> New Environment
   * staging
   * prod
   * prod-gp
-  
+
+##### Github actions
+
+* We can use environments in github actions, but the environments only available in public repositories or in corporate subscriptions.
+* In this boilerplate we don't use environments in github actions.
+
 ##### Prepare environment variables
 
 1. Copy content of this file `firebase_setting`
@@ -120,56 +124,70 @@ Gitlab --> Deployments --> Environment --> New Environment
 ```
 Gitlab --> Settings --> CI/CD --> Variables --> Add variable
 ```
+or
+```
+Github --> Settings --> Secrets --> Actions --> New repository secret
+```
 
-> In the key field paste GOOGLE_SERVICES_JSON in the value field paste your google-services.json encoded to base64
+> In the key field paste `GOOGLE_SERVICES_JSON` in the value field paste your `google-services.json` encoded to base64.
 
 2. Copy content of this file `key_firebase`: 
 
 ```
 Gitlab --> Settings --> CI/CD --> Variables --> Add variable
 ```
-> In the key field paste SA_JSON_KEY in the value field paste your SA.key encoded to base64
+or
+```
+Github --> Settings --> Secrets --> Actions --> New repository secret
+```
+
+> In the key field paste `SA_JSON_KEY` in the value field paste your `sa.key` encoded to base64.
 
 3. Copy content of this file `google_play`: 
 
 ```
 Gitlab --> Settings --> CI/CD --> Variables --> Add variable
 ```
-> In the key field paste SA_JSON_GP_KEY in the value field paste your SA.key encoded to base64
+or
+```
+Github --> Settings --> Secrets --> Actions --> New repository secret
+```
+
+> In the key field paste `SA_JSON_GP_KEY` in the value field paste your `google_play.json` encoded to base64.
 
 4. Copy content of this file `keystore`: 
 
 ```
 Gitlab --> Settings --> CI/CD --> Variables --> Add variable
 ```
-> In the key field paste KEYSTORE in the value field paste your signing encoded to base64
-
-##### Github actions
-TODO
+or
+```
+Github --> Settings --> Secrets --> Actions --> New repository secret
+```
+> In the key field paste `KEYSTORE` in the value field paste your signing key encoded to base64.
 
 ##### Environment variables
 
-| NAME        |     ENVIRONMENT      |                                          DESCRIPTION |
-|-------------|:--------------------:|-----------------------------------------------------:|
-| KEYSTORE    |         ALL          |          Encoded to base64 signing keystore (base64) |
-| KEYSTORE_PW |         ALL          |                        Password for signing keystore |
-| ALIAS       |         ALL          |                                       Keystore alias |
-| ALIAS_PW    |         ALL          |                          Password for keystore alias |
-| SA_JSON_KEY |     STAGING/PROD     |            Service Account key for Firebase (base64) |
-| SA_JSON_GP_KEY|       PROD-GP        | Service account key for Google Play Console (base64) |
-| GOOGLE_SERVICES_JSON |         ALL          |                 Main configuration file for firebase |
-| APP_VERSION_NAME | STAGING/PROD/PROD-GP |                                  Application version |
-| FIREBASE_APP_ID |     STAGING/PROD     |                           Application ID in Firebase |
-| BUILD_TASK  | STAGING/PROD/PROD-GP |         Task name in gradle (assemble, bundle, test) |
-| BUILD_TYPE  | STAGING/PROD/PROD-GP |                       Build type (assemble, release) |
-| SLACK_WEBHOOK_URL |         ALL          |                                        Slack webhook |
-| FIREBASE_TESTER_GROUP_NAME |     STAGING/PROD     |                    Name of testers group in Firebase |
-| APPROVERS            |         ALL          |            List of approvers for google-play release |
-| CI_PIPELINE_ID       |         ALL          |                     Pipeline ID used for versionCode |
-| CI_COMMIT_BEFORE_SHA |         ALL          |            Previous commit, used for build changelog |
-|FIREBASE_ARTIFACT_TYPE|     STAGING/PROD     |              Artifact type for firebase distribution |
-
-> If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile.  
+| NAME        |     ENVIRONMENT      |                                                                                                                                                                                                                                                                DESCRIPTION |
+|-------------|:--------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| KEYSTORE    |         ALL          |                                                                                                                                                                                                                                Encoded to base64 signing keystore (base64) |
+| KEYSTORE_PW |         ALL          |                                                                                                                                                                                                                                              Password for signing keystore |
+| ALIAS       |         ALL          |                                                                                                                                                                                                                                                             Keystore alias |
+| ALIAS_PW    |         ALL          |                                                                                                                                                                                                                                                Password for keystore alias |
+| SA_JSON_KEY |     STAGING/PROD     |                                                                                                                                                                                                                                  Service Account key for Firebase (base64) |
+| SA_JSON_GP_KEY|       PROD-GP        |                                                                                                                                                                                                                       Service account key for Google Play Console (base64) |
+| GOOGLE_SERVICES_JSON |         ALL          |                                                                                                                                                                                                                                       Main configuration file for firebase |
+| APP_VERSION_NAME | STAGING/PROD/PROD-GP |                                                                                                                                                                                                                                                        Application version |
+| FIREBASE_APP_ID |     STAGING/PROD     |                                                                                                                                                                                                                                                 Application ID in Firebase |
+| BUILD_TASK  | STAGING/PROD/PROD-GP |                                                                                                                                                                                                                               Task name in gradle (assemble, bundle, test) |
+| BUILD_TYPE  | STAGING/PROD/PROD-GP |                                                                                                                                                                                                                                             Build type (assemble, release) |
+| SLACK_WEBHOOK_URL |         ALL          |                                                                                                                                                                                                                                                              Slack webhook |
+| FIREBASE_TESTER_GROUP_NAME |     STAGING/PROD     |                                                                                                                                                                                                                                          Name of testers group in Firebase |
+| APPROVERS            |         ALL          |                                                                                                                                                                                                     List of approvers for google-play release, used only in github actions |
+| CI_PIPELINE_ID       |         ALL          |                                                                                                                                                        Pipeline ID used for `versionCode`, by default declared in the gitlab, in the github actions used github.run_number |
+| CI_COMMIT_BEFORE_SHA |         ALL          |                                                                                                                                               Previous commit, used for build changelog, by default declared in the gitlab, in the github actions used github.event.before |
+|FIREBASE_ARTIFACT_TYPE|     STAGING/PROD     |                                                                                                                                                                                                                                    Artifact type for firebase distribution |
+|PROJECT_DIR           |         ALL          |                                                                                                                             If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
 
 * When you complete all this preparation you can start build and release application to Firebase
 
@@ -221,3 +239,12 @@ Because of it we have to build several builds.
   - deploy_prod        - Step for build and deploy application to Firebase and Google play
 ```
 
+### Feature
+
+* Gitlab: 
+  * We have manual step to deploy application to the `Google Play`. 
+  * We have manual step for build and deploy application to staging `Firebase`, this step available on `Merge Request`.
+
+* Github:
+  * We use [trstringer/manual-approval](https://trstringer.com/github-actions-manual-approval/) action which help to create manual approve in the deploy to `Google play`.
+  * We use manual job - workflow_dispatcher for build and deploy application from any branch. 
