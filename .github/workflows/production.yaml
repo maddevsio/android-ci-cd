@@ -18,6 +18,7 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   CI_PIPELINE_ID: ${{ github.run_id }}
   CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  APPROVERS: ${{ secrets.APPROVERS }}
 
 jobs:
   prod_firebase:
@@ -35,14 +36,14 @@ jobs:
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
               bundle exec fastlane firebase_distribution
-      - uses: actions/upload-artifact@v2
-        with:
-          name: app
-          path: app/build/outputs/bundle/release/app-release.aab
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
           BUILD_TASK: "assemble"
           BUILD_TYPE: "release"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/bundle/release/app-release.aab
 
   google_play:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -69,4 +70,3 @@ jobs:
           BUILD_TASK: "bundle"
           BUILD_TYPE: "release"
           SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}
-          APPROVERS: ${{ secrets.APPROVERS }}
