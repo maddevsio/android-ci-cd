@@ -1,0 +1,113 @@
+default_platform(:android)
+platform :android do
+    before_all do |lane, options|
+        ENV["APP_FLAVOR"] = options[:flavor]
+        ENV["PROJECT_DIR"] = "./"
+        puts "Flavor environment #{options[:flavor]}"
+    end
+    def on_error(exception)
+        slack(
+            message: "Something goes wrong!",
+            success: false,
+            slack_url: ENV["SLACK_WEBHOOK_URL"],
+            attachment_properties: {
+                fields: [
+                    {
+                        title: "Error message",
+                        value: exception
+                    }
+                ]
+            }
+        )
+    end
+    def success(line)
+        slack(
+            message: "App successfully released #{line}",
+            success: true,
+            slack_url: ENV["SLACK_WEBHOOK_URL"]
+        )
+    end
+
+    desc "Build android"
+    lane :build_release do |options|
+        build_android_app(
+            task: ENV["BUILD_TASK"],
+            build_type: ENV["BUILD_TYPE"],
+            flavor: ENV["APP_FLAVOR"],
+            project_dir: "#{ENV["PROJECT_DIR"]}",
+            properties: {
+                "android.injected.signing.store.file" => "/tmp/my-release-key.keystore",
+                "android.injected.signing.store.password" => "#{ENV["KEYSTORE_PW"]}",
+                "android.injected.signing.key.alias" => "#{ENV["ALIAS"]}",
+                "android.injected.signing.key.password" => "#{ENV["ALIAS_PW"]}",
+                "versionCode" => ENV["CI_PIPELINE_ID"],
+            }
+        )
+    end
+
+    desc "test lint"
+    lane :assemble_lint do
+    gradle(task: "lintDebug")
+    end
+
+    desc "untit test"
+    lane :assemble_unit_test do
+    gradle(task: "testDebugUnitTest")
+    end
+
+    desc "Submit a new build to Firebase App Distribution"
+    lane :firebase_distribution do |options|
+        begin
+            build_release()
+
+            changes = changelog_from_git_commits(
+                #commits_count: 10,
+                between: [ENV["CI_COMMIT_BEFORE_SHA"], "HEAD"],
+                pretty: "- (%ae) %s",
+                date_format: "short",
+                match_lightweight_tag: false,
+                merge_commit_filtering: "exclude_merges"
+            )
+
+            puts "Uploading new version(#{ENV["CI_PIPELINE_ID"]}) to Firebase"
+
+            firebase_app_distribution(
+                app: ENV["FIREBASE_APP_ID"],
+                groups: ENV["FIREBASE_TESTER_GROUP_NAME"],
+                android_artifact_type: ENV["FIREBASE_ARTIFACT_TYPE"] = "APK",
+                service_credentials_file: "./key_firebase.json",
+                release_notes: changes,
+                debug: true,
+            )
+            success("Firebase")
+        rescue  => exception
+            on_error(exception)
+            UI.user_error!(exception)
+        end
+    end
+
+    desc "Deploy a new version to the Google Play"
+    lane :google_beta do |options|
+        begin
+            track = 'internal'
+
+            upload_to_play_store(
+                track: track,
+                release_status: 'draft',
+                version_code: ENV["CI_PIPELINE_ID"],
+                aab: "/app/build/outputs/bundle/release/app-release.aab",
+                json_key: "/tmp/key_gp.json",
+                track_promote_to: track,
+                skip_upload_metadata: true,
+                skip_upload_changelogs: true,
+                skip_upload_images: true,
+                skip_upload_screenshots: true
+                )
+            success("Google Play")
+        rescue  => exception
+            on_error(exception)
+            UI.user_error!(exception)
+        end
+    end
+
+end

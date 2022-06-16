@@ -1,0 +1,40 @@
+name: 'lint and tests'
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+               bundle exec fastlane assemble_lint
+
+  unit_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+              echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+              bundle exec fastlane assemble_unit_test
