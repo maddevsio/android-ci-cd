@@ -7,7 +7,7 @@ on:
       - main
   push:
     branches:
-      - main
+      - feature/ci-cd
 
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
