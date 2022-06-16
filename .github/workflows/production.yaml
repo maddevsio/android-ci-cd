@@ -46,12 +46,13 @@ jobs:
               ls -lah app/build/outputs/bundle/release/
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
-          BUILD_TASK: "bundle"
+          BUILD_TASK: "assemble" # Change to bundle if you need aab application
           BUILD_TYPE: "release"
       - uses: actions/upload-artifact@v2
         with:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: warn # Change to error, when you change BUILD_TASK to bundle
 
   google_play:
     #if: ${{ github.event.workflow_run.conclusion == 'success' }}

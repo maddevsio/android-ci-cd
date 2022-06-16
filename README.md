@@ -166,7 +166,8 @@ TODO
 | FIREBASE_TESTER_GROUP_NAME |     STAGING/PROD     |                    Name of testers group in Firebase |
 | APPROVERS            |         ALL          |            List of approvers for google-play release |
 | CI_PIPELINE_ID       |         ALL          |                     Pipeline ID used for versionCode |
-| CI_COMMIT_BEFORE_SHA |         ALL          |              Previous commit, used for build changelog |
+| CI_COMMIT_BEFORE_SHA |         ALL          |            Previous commit, used for build changelog |
+|FIREBASE_ARTIFACT_TYPE|     STAGING/PROD     |              Artifact type for firebase distribution |
 
 > If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile.  
 

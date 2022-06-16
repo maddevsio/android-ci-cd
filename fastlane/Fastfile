@@ -74,7 +74,7 @@ platform :android do
             firebase_app_distribution(
                 app: ENV["FIREBASE_APP_ID"],
                 groups: ENV["FIREBASE_TESTER_GROUP_NAME"],
-                android_artifact_type: "AAB",
+                android_artifact_type: ENV["FIREBASE_ARTIFACT_TYPE"] = "APK",
                 service_credentials_file: "./key_firebase.json",
                 release_notes: changes,
                 debug: true,
