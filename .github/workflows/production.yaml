@@ -39,11 +39,6 @@ jobs:
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
               bundle exec fastlane firebase_distribution
-              ls -lah app/
-              ls -lah app/build
-              ls -lah app/build/outputs
-              ls -lah app/build/outputs/bundle/
-              ls -lah app/build/outputs/bundle/release/
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
           BUILD_TASK: "assemble" # Change to bundle if you need aab application
