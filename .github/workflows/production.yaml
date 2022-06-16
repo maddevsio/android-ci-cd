@@ -3,12 +3,9 @@ name: 'production'
 on:
   workflow_run:
     workflows: ['staging']
-    branches: [feature/ci-cd]
+    branches: [main]
     types:
       - completed
-  push:
-    branches:
-      - feature/ci-cd
 
 env:
   KEYSTORE_PW: ${{ secrets.KEYSTORE_PW }}
@@ -24,7 +21,7 @@ env:
 
 jobs:
   prod_firebase:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository }}:latest
@@ -49,7 +46,7 @@ jobs:
           if-no-files-found: warn # Change to error, when you change BUILD_TASK to bundle
 
   google_play:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: [prod_firebase]
     runs-on: ubuntu-latest
     container:
