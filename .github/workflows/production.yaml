@@ -6,6 +6,9 @@ on:
     branches: [feature/ci-cd]
     types:
       - completed
+  push:
+    branches:
+      - feature/ci-cd
 
 env:
   KEYSTORE_PW: ${{ secrets.KEYSTORE_PW }}
