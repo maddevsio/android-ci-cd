@@ -59,14 +59,14 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v2
-        with:
-          name: app
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
           approvers: $APPROVERS
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v2
+        with:
+          name: app
       - run: |
           echo $SA_JSON_GP_KEY | base64 -d -i > key_gp.json
           bundle exec fastlane google_beta
