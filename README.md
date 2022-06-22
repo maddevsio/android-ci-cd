@@ -37,9 +37,9 @@
 
 ```
   - build base image                - Step for build base image which used for build application. 
-  - tests and lints                 - Step for run tests and lints
-  - build and deploy to firebase    - Step for build and deploy application to Firebase
-  - build and deploy to google play - Step for build and deploy application and Google play
+  - tests and lints                 - Step for run tests and lints.
+  - build and deploy to firebase    - Step for build and deploy application to Firebase.
+  - build and deploy to google play - Step for build and deploy application and Google play.
 ```
 
 * It is worth explaining what several builds are used for.
@@ -65,7 +65,6 @@ Because of it we have to build several builds.
   * We use [trstringer/manual-approval](https://trstringer.com/github-actions-manual-approval/) action which help to create manual approve in the deploy to `Google play`.
   * We use manual job - workflow_dispatcher for build and deploy application from any branch. 
 
-  
 ### Tools and services
 
 * [Fastlane](https://fastlane.tools/) - fastlane is a tool for iOS and Android developers to automate tedious tasks like generating screenshots, dealing with provisioning profiles, and releasing your application.
@@ -268,3 +267,4 @@ applicationId "com.boiler.android.hello"
 #### Configuration plugins for Fastlane
 
 * We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` 
+
