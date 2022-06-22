@@ -3,11 +3,69 @@
 [![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
 [![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
 
-### The purpose of this boilerplate
+### A small digression from this boilerplate
 
-* Mobile development just like any other development requires writing code. Development cycle include tests, build and deploy. In this case, we need to eliminate the human factor and saves developer time. 
-We can automate the processes of testing, build and deployment of the ready application to the testing environment and production environment.
+* Let's try to answer a some questions:
+  * [What is CI/CD](https://en.wikipedia.org/wiki/CI/CD) ?
+    * Above all, CI/CD allows you to increase productivity through automation. As in the manufacturing industry, 
+      you can automate the repetitive assembly process (application assembly) with automated workers, allowing developers to focus on value-added design and development processes.
+  * What are the benefits of using CI/CD in mobile development ?
+    1. `Faster release cycles`
+       * With CI/CD, developers get used to making even the smallest code changes, as they will be built and delivered automatically in the background. This automated flow ensures that there is always an alpha or beta release ready for testing with the latest code. 
+    2. `Faster feedback/response with "continuous integration"`
+       * With a faster release cycle with fewer changes, it becomes possible to pinpoint the source of a bug when a problem is identified. This is especially important for large teams where code conflicts can cause significant problems.
+    3. `Improve coding discipline with query-based assembly and automated tests`
+       * With a pull request commit, the build occurs before the merge, followed by automatic unit testing and code verification after each merge; the code itself is tested more thoroughly before it becomes part of the release.
+    4. `Early warning and increased testing with "continuous deployment"`
+       * By testing each individual change with multiple steps in the testing workflow, problems can be identified faster.
+    5. `Isolation from the complexities associated with application delivery`
+       * Every development discipline has its own set of complexities, and mobile apps are no exception. Android have completely independent and different processes for creating, signing, distributing, and installing apps. CI/CD helps to automate this process.
 
+### Advantages of this boilerplate
+
+* `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
+* `Easy adaptation to external CI/CD tools`: We use `gitlab-ci` or `github actions` as the executor fastlane commands and the construction of the workflow. 
+* `Notification`: Pipeline operation notifications, notifications about successful operations or errors in the pipeline process. 
+
+## CI/CD 
+
+* This diagram describes the flow which we use
+
+![flow](docs/android-ci-cd-CI-CD-flow.drawio.svg)
+
+* Step descriptions
+
+```
+  - build base image                - Step for build base image which used for build application. 
+  - tests and lints                 - Step for run tests and lints
+  - build and deploy to firebase    - Step for build and deploy application to Firebase
+  - build and deploy to google play - Step for build and deploy application and Google play
+```
+
+* It is worth explaining what several builds are used for.
+
+Terms and conditions:
+* Applications in `apk` format cannot be uploaded to Google play
+* Applications in `aab` format can be uploaded in Firebase and google play
+* Applications in `apk` stored in artifacts and can be downloaded from pipeline artifacts
+
+Because of it we have to build several builds.
+
+* For the convenience of testing, at the stage of `Merge Request`, we give the opportunity to build the application on demand and send it to `Firebase`.
+* It is convenient to check your application without merge code to the main branch.
+* The application in `apk` format is available as an artifact in the pipeline.
+
+### Feature
+
+* Gitlab: 
+  * We have manual step to deploy application to the `Google Play`. 
+  * We have manual step for build and deploy application to staging `Firebase`, this step available on `Merge Request`.
+
+* Github:
+  * We use [trstringer/manual-approval](https://trstringer.com/github-actions-manual-approval/) action which help to create manual approve in the deploy to `Google play`.
+  * We use manual job - workflow_dispatcher for build and deploy application from any branch. 
+
+  
 ### Tools and services
 
 * [Fastlane](https://fastlane.tools/) - fastlane is a tool for iOS and Android developers to automate tedious tasks like generating screenshots, dealing with provisioning profiles, and releasing your application.
@@ -114,7 +172,7 @@ Gitlab --> Deployments --> Environment --> New Environment
 
 ##### Github actions
 
-* We can use environments in github actions, but the environments only available in public repositories or in corporate subscriptions.
+* We can use environments in github actions, but the environments available only in public repositories or in corporate subscriptions.
 * In this boilerplate we don't use environments in github actions.
 
 ##### Prepare environment variables
@@ -210,41 +268,3 @@ applicationId "com.boiler.android.hello"
 #### Configuration plugins for Fastlane
 
 * We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` 
-
-## CI/CD 
-
-* This diagram describes the flow which we use
-
-![flow](docs/android-ci-cd-CI-CD-flow.drawio.svg)
-
-* It is worth explaining what several builds are used for.
-
-Terms and conditions:
-* Applications in `apk` format cannot be uploaded to Google play
-* Applications in `aab` format can be uploaded in Firebase and google play
-* Applications in `apk` stored in artifacts and can be downloaded from pipeline artifacts
-
-Because of it we have to build several builds.
-
-* For the convenience of testing, at the stage of `Merge Request`, we give the opportunity to build the application on demand and send it to `Firebase`.
-* It is convenient to check your application without merge code to the main branch.
-* The application in `apk` format is available as an artifact in the pipeline.
-
-* CI/CD has five steps:
-
-```
-  - build_base_image   - Step for build base image which used for build application. 
-  - tests              - Step for run tests and lints
-  - deploy_staging     - Step for build and deploy application to Firebase
-  - deploy_prod        - Step for build and deploy application to Firebase and Google play
-```
-
-### Feature
-
-* Gitlab: 
-  * We have manual step to deploy application to the `Google Play`. 
-  * We have manual step for build and deploy application to staging `Firebase`, this step available on `Merge Request`.
-
-* Github:
-  * We use [trstringer/manual-approval](https://trstringer.com/github-actions-manual-approval/) action which help to create manual approve in the deploy to `Google play`.
-  * We use manual job - workflow_dispatcher for build and deploy application from any branch. 
