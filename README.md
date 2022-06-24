@@ -7,7 +7,7 @@
 
 * `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
 * `Easy adaptation to external CI/CD tools`: We use `gitlab-ci` or `github actions` as the executor fastlane commands and the construction of the workflow. 
-* `Notification`: Pipeline operation notifications, notifications about successful operations or errors in the pipeline process. 
+* `Notification`: `Notification`: Pipeline operation Slack notifications, notifications about successful operations or errors in the pipeline process.  
 
 ## CI/CD 
 
