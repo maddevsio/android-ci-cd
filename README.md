@@ -3,7 +3,13 @@
 [![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
 [![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
 
-### A small digression from this boilerplate
+### Advantages of this boilerplate
+
+* `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
+* `Easy adaptation to external CI/CD tools`: We use `gitlab-ci` or `github actions` as the executor fastlane commands and the construction of the workflow. 
+* `Notification`: Pipeline operation notifications, notifications about successful operations or errors in the pipeline process. 
+
+## CI/CD 
 
 * Let's try to answer a some questions:
   * [What is CI/CD](https://en.wikipedia.org/wiki/CI/CD) ?
@@ -21,13 +27,7 @@
     5. `Isolation from the complexities associated with application delivery`
        * Every development discipline has its own set of complexities, and mobile apps are no exception. Android have completely independent and different processes for creating, signing, distributing, and installing apps. CI/CD helps to automate this process.
 
-### Advantages of this boilerplate
-
-* `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
-* `Easy adaptation to external CI/CD tools`: We use `gitlab-ci` or `github actions` as the executor fastlane commands and the construction of the workflow. 
-* `Notification`: Pipeline operation notifications, notifications about successful operations or errors in the pipeline process. 
-
-## CI/CD 
+### CI/CD description
 
 * This diagram describes the flow which we use
 
