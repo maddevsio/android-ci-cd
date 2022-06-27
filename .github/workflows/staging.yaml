@@ -3,7 +3,7 @@ name: 'staging'
 on:
   workflow_run:
     workflows: ['lint and tests']
-    branches: [main, feature/github-gradle-cache]
+    branches: [main]
     types:
       - completed
   workflow_dispatch:
@@ -34,7 +34,6 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/cache@v2
         with:
           path: |
@@ -43,7 +42,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
               ${{ runner.os }}-gradle-
-
       - run: |
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json

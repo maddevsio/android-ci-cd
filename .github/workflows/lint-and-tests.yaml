@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - feature/github-gradle-cache
 
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
@@ -23,7 +22,6 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/cache@v2
         with:
           path: |
@@ -32,7 +30,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
               ${{ runner.os }}-gradle-
-
       - run: |
                echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
                bundle exec fastlane assemble_lint
@@ -46,7 +43,6 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/cache@v2
         with:
           path: |
@@ -55,7 +51,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
               ${{ runner.os }}-gradle-
-
       - run: |
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
               bundle exec fastlane assemble_unit_test
