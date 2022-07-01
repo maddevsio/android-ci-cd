@@ -1,18 +1,20 @@
-.before_script: &before_script
+default:
   image: $CI_REGISTRY_IMAGE:latest
-  before_script:
-    - export GRADLE_USER_HOME=cache/.gradle
-    - echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
-    - echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
-    - echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
-  #tags:
-  #  - "my-tag"
-  cache:
-    key:
-      files:
-        - gradle/wrapper/gradle-wrapper.properties
-    paths:
-      - $PWD/cache/.gradle/
+#  tags:
+#    - my-tag
+
+before_script:
+  - export GRADLE_USER_HOME=cache/.gradle
+  - echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
+  - echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
+  - echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+
+cache:
+  key:
+    files:
+      - gradle/wrapper/gradle-wrapper.properties
+  paths:
+    - $PWD/cache/.gradle/
 
 stages:
   - build_base_image
@@ -25,6 +27,7 @@ build_base_image:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       changes:
         - Dockerfile
+  image: docker:dind
   stage: build_base_image
   services:
     - name: docker:dind
@@ -34,10 +37,9 @@ build_base_image:
       DOCKER_HOST: tcp://docker:2375/
       DOCKER_DRIVER: overlay2
       DOCKER_TLS_CERTDIR: ""
-  #tags:
-  #  - "my-tag"
-  script:
+  before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY_IMAGE
+  script:
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:latest
@@ -47,7 +49,6 @@ lints:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   stage: tests
-  <<: *before_script
   script:
     - bundle exec fastlane assemble_lint
 
@@ -56,7 +57,6 @@ unit_test:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   stage: tests
-  <<: *before_script
   script:
     - bundle exec fastlane assemble_unit_test
 
@@ -66,7 +66,6 @@ staging_firebase:
       when: manual
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   stage: deploy_staging
-  <<: *before_script
   script:
     - bundle exec fastlane firebase_distribution
   environment:
@@ -76,7 +75,6 @@ prod_firebase:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   stage: deploy_prod
-  <<: *before_script
   script:
     - bundle exec fastlane firebase_distribution
   artifacts:
@@ -91,7 +89,6 @@ google_play:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       when: manual
   stage: deploy_prod
-  <<: *before_script
   script:
     - echo $SA_JSON_GP_KEY | base64 -d -i > key_gp.json
     - bundle exec fastlane google_beta
