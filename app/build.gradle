@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
     id 'com.google.gms.google-services'
 }
 
@@ -7,6 +8,10 @@ def getVersionCode = { ->
     def code = project.hasProperty('versionCode') ? versionCode.toInteger() : Integer.MAX_VALUE
     println "VersionCode is set to $code"
     return code
+}
+
+repositories {
+    mavenCentral()
 }
 
 android {
@@ -55,4 +60,9 @@ android {
 
     flavorDimensions 'app'
 
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
