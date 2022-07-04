@@ -24,7 +24,7 @@ stages:
 
 build_base_image:
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "main"
       changes:
         - Dockerfile
   image: docker:dind
@@ -46,25 +46,25 @@ build_base_image:
 
 lints:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    - if: $CI_COMMIT_REF_NAME == "main"
   stage: tests
   script:
-    - bundle exec fastlane assemble_lint
+    - bundle exec fastlane lint_test
 
 unit_test:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    - if: $CI_COMMIT_REF_NAME == "main"
   stage: tests
   script:
-    - bundle exec fastlane assemble_unit_test
+    - bundle exec fastlane unit_test
 
 staging_firebase:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
       when: manual
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "main"
   stage: deploy_staging
   script:
     - bundle exec fastlane firebase_distribution
@@ -73,7 +73,7 @@ staging_firebase:
 
 prod_firebase:
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "main"
   stage: deploy_prod
   script:
     - bundle exec fastlane firebase_distribution
@@ -86,7 +86,7 @@ prod_firebase:
 
 google_play:
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "main"
       when: manual
   stage: deploy_prod
   script:
