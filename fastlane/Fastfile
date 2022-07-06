@@ -46,12 +46,12 @@ platform :android do
     end
 
     desc "test lint"
-    lane :assemble_lint do
+    lane :lint do
     gradle(task: "lintDebug")
     end
 
-    desc "untit test"
-    lane :assemble_unit_test do
+    desc "unit test"
+    lane :unit_test do
     gradle(task: "testDebugUnitTest")
     end
 

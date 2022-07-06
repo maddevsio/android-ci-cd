@@ -18,7 +18,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.boiler.android.hello"
+        applicationId System.env.APP_PACKAGE_NAME
         minSdk 24
         targetSdk 32
         versionCode getVersionCode()

@@ -49,7 +49,7 @@ lints:
   stage: tests
   <<: *before_script
   script:
-    - bundle exec fastlane assemble_lint
+    - bundle exec fastlane lint
 
 unit_test:
   rules:
@@ -58,7 +58,7 @@ unit_test:
   stage: tests
   <<: *before_script
   script:
-    - bundle exec fastlane assemble_unit_test
+    - bundle exec fastlane unit_test
 
 staging_firebase:
   rules:
