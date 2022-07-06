@@ -20,6 +20,8 @@ env:
   FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_STG }}
   CI_PIPELINE_ID: ${{ github.run_number }}
   CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
+  APP_PACKAGE_NAME_STAGING: ${{ secrets.APP_PACKAGE_NAME_STAGING }}
   BUILD_TASK: "assemble"
   BUILD_TYPE: "debug"
 
