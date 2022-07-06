@@ -11,6 +11,8 @@ on:
 
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+  APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
+  APP_PACKAGE_NAME_STAGING: ${{ secrets.APP_PACKAGE_NAME_STAGING }}
 
 jobs:
   lint:
@@ -32,7 +34,7 @@ jobs:
               ${{ runner.os }}-gradle-
       - run: |
                echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
-               bundle exec fastlane assemble_lint
+               bundle exec fastlane lint
 
   unit_tests:
     runs-on: ubuntu-latest
@@ -53,4 +55,4 @@ jobs:
               ${{ runner.os }}-gradle-
       - run: |
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
-              bundle exec fastlane assemble_unit_test
+              bundle exec fastlane unit_test

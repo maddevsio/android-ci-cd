@@ -50,7 +50,7 @@ lints:
     - if: $CI_COMMIT_REF_NAME == "main"
   stage: tests
   script:
-    - bundle exec fastlane lint_test
+    - bundle exec fastlane lint
 
 unit_test:
   rules:

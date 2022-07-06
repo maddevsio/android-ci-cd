@@ -11,7 +11,8 @@ Stop publishing your Android apps manually and start doing this in fully automat
 
 * `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
 * `Easy adaptation to external CI/CD tools`: We use `gitlab-ci` or `github actions` as the executor fastlane commands and the construction of the workflow. 
-* `Notification`: `Notification`: Pipeline operation Slack notifications, notifications about successful operations or errors in the pipeline process.  
+* `Notification`: Pipeline operation Slack notifications, notifications about successful operations or errors in the pipeline process.  
+* `No special build machine setup required`: We build the application inside a docker container with all the dependencies installed, this provides portability, and the ability to use standard `github` agents or `gitlab` runners. 
 
 ## CI/CD 
 
@@ -216,43 +217,32 @@ GitLab --> Deployments --> Environment --> New Environment
 
 ##### Environment variables
 
-| NAME                        |      ENVIRONMENT     | DESCRIPTION |
-|-----------------------------|:--------------------:|-----------------------------:|
-| KEYSTORE                    |         ALL          | Encoded to base64 signing keystore (base64) |
-| KEYSTORE_PW                 |         ALL          | Password for signing keystore |
-| ALIAS                       |         ALL          | Keystore alias |
-| ALIAS_PW                    |         ALL          | Password for keystore alias |
-| SA_JSON_KEY                 |     STAGING/PROD     | Service Account key for Firebase (base64) |
-| SA_JSON_GP_KEY              |       PROD-GP        | Service account key for Google Play Console (base64) |
-| GOOGLE_SERVICES_JSON        |         ALL          | Main configuration file for Firebase |
-| APP_VERSION_NAME            | STAGING/PROD/PROD-GP | Application version |
-| FIREBASE_APP_ID             |     STAGING/PROD     | Application ID in Firebase |
-| BUILD_TASK                  | STAGING/PROD/PROD-GP | Task name in gradle (assemble, bundle, test) |
-| BUILD_TYPE                  | STAGING/PROD/PROD-GP | Build type (assemble, release) |
-| SLACK_WEBHOOK_URL           |         ALL          | Slack webhook |
-| FIREBASE_TESTER_GROUP_NAME  |     STAGING/PROD     | Name of testers group in Firebase |
-| APPROVERS                   |         ALL          | List of approvers for Google Play release, used only in GitHub Actions |
-| CI_PIPELINE_ID              |         ALL          | Pipeline ID used for `versionCode`, by default declared in the GitLab, in the GitHub Actions used github.run_number |
-| CI_COMMIT_BEFORE_SHA        |         ALL          | Previous commit, used for build changelog, by default declared in the GitLab, in the GitHub Actions used github.event.before |
-| FIREBASE_ARTIFACT_TYPE      |     STAGING/PROD     | Artifact type for Firebase distribution |
+| NAME                        |     ENVIRONMENT      |                                                                                                                                    DESCRIPTION |
+|-----------------------------|:--------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------:|
+| KEYSTORE                    |         ALL          |                                                                                                    Encoded to base64 signing keystore (base64) |
+| KEYSTORE_PW                 |         ALL          |                                                                                                                  Password for signing keystore |
+| ALIAS                       |         ALL          |                                                                                                                                 Keystore alias |
+| ALIAS_PW                    |         ALL          |                                                                                                                    Password for keystore alias |
+| SA_JSON_KEY                 |     STAGING/PROD     |                                                                                                      Service Account key for Firebase (base64) |
+| SA_JSON_GP_KEY              |       PROD-GP        |                                                                                           Service account key for Google Play Console (base64) |
+| GOOGLE_SERVICES_JSON        |         ALL          |                                                                                                           Main configuration file for Firebase |
+| APP_VERSION_NAME            | STAGING/PROD/PROD-GP |                                                                                                                            Application version |
+| FIREBASE_APP_ID             |     STAGING/PROD     |                                                                                                                     Application ID in Firebase |
+| BUILD_TASK                  | STAGING/PROD/PROD-GP |                                                                                                   Task name in gradle (assemble, bundle, test) |
+| BUILD_TYPE                  | STAGING/PROD/PROD-GP |                                                                                                                 Build type (assemble, release) |
+| SLACK_WEBHOOK_URL           |         ALL          |                                                                                                                                  Slack webhook |
+| FIREBASE_TESTER_GROUP_NAME  |     STAGING/PROD     |                                                                                                              Name of testers group in Firebase |
+| APPROVERS                   |         ALL          |                                                                         List of approvers for Google Play release, used only in GitHub Actions |
+| CI_PIPELINE_ID              |         ALL          |                            Pipeline ID used for `versionCode`, by default declared in the GitLab, in the GitHub Actions used github.run_number |
+| CI_COMMIT_BEFORE_SHA        |         ALL          |                   Previous commit, used for build changelog, by default declared in the GitLab, in the GitHub Actions used github.event.before |
+| FIREBASE_ARTIFACT_TYPE      |     STAGING/PROD     |                                                                                                        Artifact type for Firebase distribution |
 | PROJECT_DIR                 |         ALL          | If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
+| APP_PACKAGE_NAME            |         ALL          |                                                                 The default android package name for example we use `com.boiler.android.hello` |
+| APP_PACKAGE_NAME_STAGING    |         ALL          |                                  The android package name for staging `Firebase` project for example we use `com.boiler.android.hello.staging` |
 
 * When you complete all this preparation you can start build and release application to Firebase
 
 ### Additional configuration
-
-#### Package name
-
-* The name of the package is declared in these files:
-
-  * `Appfile`
-    ```commandline
-    package_name("com.boiler.android.hello") # Default package name
-    ```
-  * `app/build.gradle`
-    ```commandline
-    applicationId "com.boiler.android.hello"
-    ```
 
 #### Configuration plugins for Fastlane
 
