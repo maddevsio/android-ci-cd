@@ -2,8 +2,10 @@ FROM openjdk:11-jdk-slim-buster
 
 # Just matched `app/build.gradle`
 ENV ANDROID_COMPILE_SDK "30"
+
 # Just matched `app/build.gradle`
 ENV ANDROID_BUILD_TOOLS "30.0.2"
+
 # Version from https://developer.android.com/studio/releases/sdk-tools
 ENV ANDROID_SDK_TOOLS "7583922"
 ENV ANDROID_HOME /android-sdk-linux
