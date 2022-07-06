@@ -45,7 +45,7 @@ platform :android do
         )
     end
 
-    desc "test lint"
+    desc "lint"
     lane :lint do
     gradle(task: "lintDebug")
     end
