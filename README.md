@@ -3,6 +3,10 @@
 [![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
 [![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
 
+### Stop publishing your Android apps manually and start doing this in fully automated fashion to any stage (test, beta, prod).
+
+---
+
 ### Advantages of this boilerplate
 
 * `Quick start CI/CD`: With this boilerplate you can easily build the CI/CD for your android app based on `fastlane`.
