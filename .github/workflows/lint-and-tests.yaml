@@ -12,7 +12,6 @@ on:
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
-  APP_PACKAGE_NAME_STAGING: ${{ secrets.APP_PACKAGE_NAME_STAGING }}
 
 jobs:
   lint:
