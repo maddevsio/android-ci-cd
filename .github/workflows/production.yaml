@@ -16,6 +16,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
+  FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
   CI_PIPELINE_ID: ${{ github.run_number }}
   CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
