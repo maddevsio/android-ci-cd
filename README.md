@@ -238,7 +238,6 @@ GitLab --> Deployments --> Environment --> New Environment
 | FIREBASE_ARTIFACT_TYPE      |     STAGING/PROD     |                                                                                                        Artifact type for Firebase distribution |
 | PROJECT_DIR                 |         ALL          | If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
 | APP_PACKAGE_NAME            |         ALL          |                                                                 The default android package name for example we use `com.boiler.android.hello` |
-| APP_PACKAGE_NAME_STAGING    |         ALL          |                                  The android package name for staging `Firebase` project for example we use `com.boiler.android.hello.staging` |
 
 * When you complete all this preparation you can start build and release application to Firebase
 
