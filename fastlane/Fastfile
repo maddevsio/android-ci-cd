@@ -123,7 +123,7 @@ end
             shield_scale: "0.55",
             shield_gravity: "Center",
           )
-        elsif options[:environment] == "prod"
+        elsif options[:environment] =~ /prod/
           add_badge(
             glob: "/app/src/main/res/mipmap-*/ic_launcher*.png",
             shield: "PROD-#{ENV["CI_PIPELINE_ID"]}-blue",
