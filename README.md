@@ -68,6 +68,12 @@ Because of it we have to build several builds.
 * GitHub:
   * We use [trstringer/manual-approval](https://trstringer.com/github-actions-manual-approval/) action which help to create manual approve in the deploy to `Google Play`.
   * We use manual job - workflow_dispatcher for build and deploy application from any branch. 
+* Fastlane plugin badge
+  * This gem helps to add a badge to your Android app icon.
+  * More info [here](https://docs.fastlane.tools/actions/badge/)
+  * You can always configure for your project, but here are examples of how we did it
+ 
+       ![staging](docs/badge_staging.png) ![prod](docs/badge_prod.png)
 
 ### Tools and services
 
@@ -238,6 +244,7 @@ GitLab --> Deployments --> Environment --> New Environment
 | FIREBASE_ARTIFACT_TYPE      |     STAGING/PROD     |                                                                                                        Artifact type for Firebase distribution |
 | PROJECT_DIR                 |         ALL          | If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
 | APP_PACKAGE_NAME            |         ALL          |                                                                 The default android package name for example we use `com.boiler.android.hello` |
+| CI_ENVIRONMENT_NAME         |     STAGING/PROD     |                                                                                         Used in fastlane badge, to display env in icon.        |
 
 * When you complete all this preparation you can start build and release application to Firebase
 
@@ -245,4 +252,4 @@ GitLab --> Deployments --> Environment --> New Environment
 
 #### Configuration plugins for Fastlane
 
-* We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` 
+* We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` and `fastlane-plugin-badge`

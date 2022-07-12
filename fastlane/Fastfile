@@ -58,6 +58,7 @@ platform :android do
     desc "Submit a new build to Firebase App Distribution"
     lane :firebase_distribution do |options|
         begin
+            add_badge_to_icon(environment: ENV["CI_ENVIRONMENT_NAME"])
             build_release()
 
             changes = changelog_from_git_commits(
@@ -90,12 +91,12 @@ platform :android do
     lane :google_beta do |options|
         begin
             track = 'internal'
+            build_release()
 
             upload_to_play_store(
                 track: track,
                 release_status: 'draft',
                 version_code: ENV["CI_PIPELINE_ID"],
-                aab: "/app/build/outputs/bundle/release/app-release.aab",
                 json_key: "/tmp/key_gp.json",
                 track_promote_to: track,
                 skip_upload_metadata: true,
@@ -111,3 +112,25 @@ platform :android do
     end
 
 end
+
+    private_lane :add_badge_to_icon do |options|
+        if options[:environment] == "staging"
+          add_badge(
+            glob: "/app/src/main/res/mipmap-*/ic_launcher*.png",
+            shield: "STAGING-#{ENV["CI_PIPELINE_ID"]}-green",
+            no_badge: true,
+            dark: true,
+            shield_scale: "0.55",
+            shield_gravity: "Center",
+          )
+        elsif options[:environment] == "prod"
+          add_badge(
+            glob: "/app/src/main/res/mipmap-*/ic_launcher*.png",
+            shield: "PROD-#{ENV["CI_PIPELINE_ID"]}-blue",
+            no_badge: true,
+            dark: true,
+            shield_scale: "0.55",
+            shield_gravity: "Center",
+          )
+        end
+      end

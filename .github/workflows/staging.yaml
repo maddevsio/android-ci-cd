@@ -23,6 +23,7 @@ env:
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
   BUILD_TASK: "assemble"
   BUILD_TYPE: "debug"
+  CI_ENVIRONMENT_NAME: ${{ env.GITHUB_WORKFLOW }}
 
 jobs:
   staging_firebase:
