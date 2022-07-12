@@ -88,7 +88,7 @@ google_play:
       when: manual
   stage: deploy_prod
   script:
-    - echo $SA_JSON_GP_KEY | base64 -d -i > key_gp.json
+    - echo $SA_JSON_GP_KEY | base64 -d -i > /tmp/key_gp.json
     - bundle exec fastlane google_beta
   dependencies:
     - prod_firebase
