@@ -27,22 +27,20 @@ build_base_image:
     - if: $CI_COMMIT_REF_NAME == "main"
       changes:
         - Dockerfile
-  image: docker:dind
   stage: build_base_image
-  services:
-    - name: docker:dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
-  variables:
-      DOCKER_HOST: tcp://docker:2375/
-      DOCKER_DRIVER: overlay2
-      DOCKER_TLS_CERTDIR: ""
+  image:
+    name: gcr.io/kaniko-project/debug:769
+    entrypoint: [""]
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY_IMAGE
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
   script:
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:latest
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination $CI_REGISTRY_IMAGE:latest
+
 
 lints:
   rules:
