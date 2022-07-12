@@ -20,7 +20,7 @@ env:
   CI_PIPELINE_ID: ${{ github.run_number }}
   CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
-  CI_ENVIRONMENT_NAME: ${{ env.GITHUB_WORKFLOW }}
+  CI_ENVIRONMENT_NAME: ${{ github.workflow }}
 
 jobs:
   prod_firebase:
