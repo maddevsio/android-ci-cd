@@ -52,13 +52,12 @@ Stop publishing your Android apps manually and start doing this in a fully autom
 Terms and conditions:
 * Applications in `apk` format cannot be uploaded to Google Play
 * Applications in `aab` format can be uploaded in Firebase and Google Play
-* Applications in `apk` are stored in artifacts and can be downloaded from pipeline artifacts
 
 Because of it, we have to build several builds.
 
 * For the convenience of testing, at the stage of `Merge Request`, we give the opportunity to build the application on demand and send it to `Firebase`.
 * It is convenient to check your application without merging code to the main branch.
-* The application in `apk` format is available as an artifact in the pipeline.
+* The application in `apk` format upload to the Firebase.
 
 ### Feature
 
