@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/semver2
     paths:
       - 'Dockerfile'
 

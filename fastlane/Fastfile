@@ -42,7 +42,7 @@ platform :android do
 
         semver = ENV["SEMVER"]
         if semver
-            isReleasable = analyze_commits(match: '*-\"#{ENV["FLAVOR_TYPE"]}\"')
+            isReleasable = analyze_commits(match: 'v*')
             tag = "#{lane_context[SharedValues::RELEASE_NEXT_VERSION]}-#{ENV["FLAVOR_TYPE"]}"
             puts "RELEASE_NEXT_VERSION #{lane_context[SharedValues::RELEASE_NEXT_VERSION]}-#{ENV["FLAVOR_TYPE"]}"
 
