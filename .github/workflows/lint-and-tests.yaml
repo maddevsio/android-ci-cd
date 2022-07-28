@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - feature/semver2
 
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}

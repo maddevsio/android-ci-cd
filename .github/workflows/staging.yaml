@@ -3,7 +3,7 @@ name: 'staging'
 on:
   workflow_run:
     workflows: ['lint and tests']
-    branches: [main]
+    branches: [main,feature/semver2]
     types:
       - completed
   workflow_dispatch:
@@ -24,6 +24,9 @@ env:
   BUILD_TASK: "assemble"
   BUILD_TYPE: "debug"
   CI_ENVIRONMENT_NAME: ${{ github.workflow }}
+  SEMVER: "true"
+  FLAVOR_TYPE: "beta"
+  GIT_REMOTE: "https://${{ secrets.BASEAUTH }}@github.com:maddevsio/android-ci-cd.git"
 
 jobs:
   staging_firebase:
@@ -44,6 +47,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
               ${{ runner.os }}-gradle-
+
+      - uses: dawidd6/action-get-tag@v1
+        with:
+          # Optionally strip `v` prefix
+          strip_v: true
+      - run: echo ${{steps.tag.outputs.tag}}
+
       - run: |
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
