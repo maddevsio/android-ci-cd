@@ -3,6 +3,7 @@ platform :android do
     before_all do |lane, options|
         ENV["APP_FLAVOR"] = options[:flavor]
         ENV["PROJECT_DIR"] = "./"
+        tag_prefix = 'v*'
         puts "Flavor environment #{options[:flavor]}"
     end
     def on_error(exception)
@@ -42,7 +43,7 @@ platform :android do
 
         semver = ENV["SEMVER"]
         if semver
-            isReleasable = analyze_commits(match: 'v*')
+            isReleasable = analyze_commits(match: tag_prefix)
             tag = "#{lane_context[SharedValues::RELEASE_NEXT_VERSION]}-#{ENV["FLAVOR_TYPE"]}"
             puts "RELEASE_NEXT_VERSION #{lane_context[SharedValues::RELEASE_NEXT_VERSION]}-#{ENV["FLAVOR_TYPE"]}"
 

@@ -55,7 +55,6 @@ jobs:
       - run: echo ${{steps.tag.outputs.tag}}
 
       - run: |
-              git describe --tags
               git describe --tags --match='v*'
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
