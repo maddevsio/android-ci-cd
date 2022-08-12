@@ -3,7 +3,7 @@ name: 'staging'
 on:
   workflow_run:
     workflows: ['lint and tests']
-    branches: [main,feature/semver2]
+    branches: [main]
     types:
       - completed
   workflow_dispatch:
@@ -19,18 +19,16 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_STG }}
   CI_PIPELINE_ID: ${{ github.run_number }}
-  CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  CI_COMMIT_BEFORE_SHA: ${{ github.sha }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
   BUILD_TASK: "assemble"
   BUILD_TYPE: "debug"
   CI_ENVIRONMENT_NAME: ${{ github.workflow }}
   SEMVER: "true"
   FLAVOR_TYPE: "beta"
-  GIT_REMOTE: "https://${{ secrets.BASEAUTH }}@github.com:maddevsio/android-ci-cd.git"
 
 jobs:
   staging_firebase:
-    if: ${{ (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || (github.event_name == 'workflow_dispatch' && github.event.workflow_run.conclusion != 'success') }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository }}:latest
@@ -39,23 +37,15 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/cache@v2
         with:
-          path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
+          path: ${{ github.workspace }}/caches/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
               ${{ runner.os }}-gradle-
-
-      - uses: dawidd6/action-get-tag@v1
-        with:
-          # Optionally strip `v` prefix
-          strip_v: true
-      - run: echo ${{steps.tag.outputs.tag}}
-
       - run: |
-              git describe --tags --match='v*'
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json

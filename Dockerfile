@@ -29,4 +29,4 @@ RUN wget --quiet --output-document=android-sdk.zip "https://dl.google.com/androi
 COPY Gemfile .
 RUN gem install bundler && \
     bundle install && \
-    gem install fastlane-plugin-firebase_app_distribution fastlane-plugin-badge fastlane-plugin-versioning_android fastlane-plugin-semantic_release
+    gem install fastlane-plugin-firebase_app_distribution fastlane-plugin-badge fastlane-plugin-semantic_release

@@ -9,6 +9,11 @@ def getVersionCode = { ->
     println "VersionCode is set to $code"
     return code
 }
+def getVersionName = { ->
+    def code = project.hasProperty('versionName') ? versionName.toString() : System.env.APP_VERSION_NAME
+    println "versionName is set to $code"
+    return code
+}
 
 repositories {
     mavenCentral()
@@ -22,7 +27,7 @@ android {
         minSdk 24
         targetSdk 32
         versionCode getVersionCode()
-        versionName System.env.APP_VERSION_NAME
+        versionName getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -44,7 +49,7 @@ android {
             resValue "string", "app_name", "staging boiler"
 
             applicationIdSuffix ".staging"
-            versionNameSuffix "-S"
+            versionNameSuffix "-staging"
         }
     }
 

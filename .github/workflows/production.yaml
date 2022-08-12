@@ -18,9 +18,10 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
   CI_PIPELINE_ID: ${{ github.run_number }}
-  CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  CI_COMMIT_BEFORE_SHA: ${{ github.sha }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
   CI_ENVIRONMENT_NAME: ${{ github.workflow }}
+  SEMVER: "true"
 
 jobs:
   prod_firebase:
@@ -33,6 +34,9 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/cache@v2
         with:
           path: |
@@ -45,33 +49,10 @@ jobs:
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+              git config user.name github-actions
+              git config user.email github-actions@github.com
               bundle exec fastlane firebase_distribution
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
           BUILD_TASK: "assemble" # Change to bundle if you need aab application
           BUILD_TYPE: "release"
-
-  google_play:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    needs: [prod_firebase]
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository }}:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: ${{ secrets.APPROVERS }}
-      - uses: actions/checkout@v3
-      - run: |
-          echo $SA_JSON_GP_KEY | base64 -d -i > /tmp/key_gp.json
-          echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
-          echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
-          bundle exec fastlane google_beta
-        env:
-          BUILD_TASK: "bundle"
-          BUILD_TYPE: "release"
-          SA_JSON_GP_KEY: ${{ secrets.SA_JSON_GP_KEY }}

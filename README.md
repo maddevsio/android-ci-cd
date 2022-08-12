@@ -225,29 +225,30 @@ GitLab --> Deployments --> Environment --> New Environment
 
 ##### Environment variables
 
-| NAME                        |     ENVIRONMENT      |                                                                                                                                    DESCRIPTION |
-|-----------------------------|:--------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------:|
-| KEYSTORE                    |         ALL          |                                                                                                    Encoded to base64 signing keystore (base64) |
-| KEYSTORE_PW                 |         ALL          |                                                                                                                  Password for signing keystore |
-| ALIAS                       |         ALL          |                                                                                                                                 Keystore alias |
-| ALIAS_PW                    |         ALL          |                                                                                                                    Password for keystore alias |
-| SA_JSON_KEY                 |     STAGING/PROD     |                                                                                                      Service Account key for Firebase (base64) |
-| SA_JSON_GP_KEY              |       PROD-GP        |                                                                                           Service account key for Google Play Console (base64) |
-| GOOGLE_SERVICES_JSON        |         ALL          |                                                                                                           Main configuration file for Firebase |
-| APP_VERSION_NAME            | STAGING/PROD/PROD-GP |                                                                                                                            Application version |
-| FIREBASE_APP_ID             |     STAGING/PROD     |                                                                                                                     Application ID in Firebase |
-| BUILD_TASK                  | STAGING/PROD/PROD-GP |                                                                                                   Task name in gradle (assemble, bundle, test) |
-| BUILD_TYPE                  | STAGING/PROD/PROD-GP |                                                                                                                 Build type (assemble, release) |
-| SLACK_WEBHOOK_URL           |         ALL          |                                                                                                                                  Slack webhook |
-| FIREBASE_TESTER_GROUP_NAME  |     STAGING/PROD     |                                                                                                              Name of testers group in Firebase |
-| APPROVERS                   |         ALL          |                                                                         List of approvers for Google Play release, used only in GitHub Actions |
-| CI_PIPELINE_ID              |         ALL          |                            Pipeline ID used for `versionCode`, by default declared in the GitLab, in the GitHub Actions used github.run_number |
-| CI_COMMIT_BEFORE_SHA        |         ALL          |                   Previous commit, used for build changelog, by default declared in the GitLab, in the GitHub Actions used github.event.before |
-| FIREBASE_ARTIFACT_TYPE      |     STAGING/PROD     |                                                                                                        Artifact type for Firebase distribution |
-| PROJECT_DIR                 |         ALL          | If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
-| APP_PACKAGE_NAME            |         ALL          |                                                                 The default android package name for example we use `com.boiler.android.hello` |
-| CI_ENVIRONMENT_NAME         |     STAGING/PROD     |                                                                                         Used in fastlane badge, to display env in icon.        |
-
+| NAME                      |     ENVIRONMENT      |                                                                                                                                               DESCRIPTION |
+|---------------------------|:--------------------:|----------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| KEYSTORE                  |         ALL          |                                                                                                               Encoded to base64 signing keystore (base64) |
+| KEYSTORE_PW               |         ALL          |                                                                                                                             Password for signing keystore |
+| ALIAS                     |         ALL          |                                                                                                                                            Keystore alias |
+| ALIAS_PW                  |         ALL          |                                                                                                                               Password for keystore alias |
+| SA_JSON_KEY               |     STAGING/PROD     |                                                                                                                 Service Account key for Firebase (base64) |
+| SA_JSON_GP_KEY            |       PROD-GP        |                                                                                                      Service account key for Google Play Console (base64) |
+| GOOGLE_SERVICES_JSON      |         ALL          |                                                                                                                      Main configuration file for Firebase |
+| APP_VERSION_NAME          | STAGING/PROD/PROD-GP |                                                                                                                                       Application version |
+| FIREBASE_APP_ID           |     STAGING/PROD     |                                                                                                                                Application ID in Firebase |
+| BUILD_TASK                | STAGING/PROD/PROD-GP |                                                                                                              Task name in gradle (assemble, bundle, test) |
+| BUILD_TYPE                | STAGING/PROD/PROD-GP |                                                                                                                            Build type (assemble, release) |
+| SLACK_WEBHOOK_URL         |         ALL          |                                                                                                                                             Slack webhook |
+| FIREBASE_TESTER_GROUP_NAME |     STAGING/PROD     |                                                                                                                         Name of testers group in Firebase |
+| APPROVERS                 |         ALL          |                                                                                    List of approvers for Google Play release, used only in GitHub Actions |
+| CI_PIPELINE_ID            |         ALL          |                                       Pipeline ID used for `versionCode`, by default declared in the GitLab, in the GitHub Actions used github.run_number |
+| CI_COMMIT_BEFORE_SHA      |         ALL          |                              Previous commit, used for build changelog, by default declared in the GitLab, in the GitHub Actions used github.event.before |
+| FIREBASE_ARTIFACT_TYPE    |     STAGING/PROD     |                                                                                                                   Artifact type for Firebase distribution |
+| PROJECT_DIR               |         ALL          |            If the project is not in the main directory, you can specify the path to the project directory through the `PROJECT_DIR` variable in Fastfile. |
+| APP_PACKAGE_NAME          |         ALL          |                                                                            The default android package name for example we use `com.boiler.android.hello` |
+| CI_ENVIRONMENT_NAME       |     STAGING/PROD     |                                                                                                           Used in fastlane badge, to display env in icon. |
+| SEMVER                    |         ALL          |                                                               if you want to use app versioning . For gilab, you also need to add a variable GITLAB_TOKEN |
+| GITLAB_TOKEN              |         PROD         |                                                                                                                           Used for application versioning |
 * When you complete all this preparation, you can start to build and release the application to Firebase
 
 ### Additional configuration
@@ -255,3 +256,14 @@ GitLab --> Deployments --> Environment --> New Environment
 #### Configuration plugins for Fastlane
 
 * We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` and `fastlane-plugin-badge`
+
+## Semantic-release
+* If you want to use semantic-release to version your application use Conventional Commits more [here](https://www.conventionalcommits.org/en/v1.0.0/)
+
+```terraform
+fix: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning).
+feat: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning).
+BREAKING CHANGE: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of commits of any type.
+types other than fix: and feat: are allowed, for example @commitlint/config-conventional (based on the the Angular convention) recommends build:, chore:, ci:, docs:, style:, refactor:, perf:, test:, and others.
+footers other than BREAKING CHANGE: <description> may be provided and follow a convention similar to git trailer format.
+```
