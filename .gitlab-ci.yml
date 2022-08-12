@@ -8,6 +8,9 @@ before_script:
   - echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
   - echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
   - echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+  - git config --global user.email $GITLAB_USER_EMAIL
+  - git config --global user.name $CI_REGISTRY_USER
+  - git remote set-url origin https://oauth2:$GITLAB_TOKEN@gitlab.com/$CI_PROJECT_PATH
 
 cache:
   key:
@@ -75,10 +78,6 @@ prod_firebase:
   stage: deploy_prod
   script:
     - bundle exec fastlane firebase_distribution
-  artifacts:
-    paths:
-      - app/build/outputs/bundle/release/app-release.aab
-    expire_in: 1 day
   environment:
     name: prod
 

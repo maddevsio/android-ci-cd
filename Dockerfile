@@ -13,7 +13,7 @@ ENV PATH="${PATH}:/android-sdk-linux/platform-tools/"
 
 # Install OS packages
 RUN apt-get --quiet update --yes && \
-    apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 build-essential ruby ruby-dev graphicsmagick
+    apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 build-essential ruby ruby-dev graphicsmagick git
 
 # Install Android SDK
 RUN wget --quiet --output-document=android-sdk.zip "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip" && \
@@ -29,4 +29,4 @@ RUN wget --quiet --output-document=android-sdk.zip "https://dl.google.com/androi
 COPY Gemfile .
 RUN gem install bundler && \
     bundle install && \
-    gem install fastlane-plugin-firebase_app_distribution fastlane-plugin-badge
+    gem install fastlane-plugin-firebase_app_distribution fastlane-plugin-badge fastlane-plugin-semantic_release

@@ -18,9 +18,10 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}
   CI_PIPELINE_ID: ${{ github.run_number }}
-  CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  CI_COMMIT_BEFORE_SHA: ${{ github.sha }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
   CI_ENVIRONMENT_NAME: ${{ github.workflow }}
+  SEMVER: "true"
 
 jobs:
   prod_firebase:
@@ -33,6 +34,9 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/cache@v2
         with:
           path: |
@@ -45,6 +49,8 @@ jobs:
               echo $KEYSTORE | base64 -d -i > /tmp/my-release-key.keystore
               echo $SA_JSON_KEY | base64 -d -i > key_firebase.json
               echo $GOOGLE_SERVICES_JSON | base64 -d -i > app/google-services.json
+              git config user.name github-actions
+              git config user.email github-actions@github.com
               bundle exec fastlane firebase_distribution
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_PROD }}

@@ -30,6 +30,15 @@ platform :android do
 
     desc "Build android"
     lane :build_release do |options|
+
+        semver = ENV["SEMVER"]
+        if semver
+            tag_prefix = "v*"
+            isReleasable = analyze_commits(match: tag_prefix)
+            puts "RELEASE_NEXT_VERSION #{lane_context[SharedValues::RELEASE_NEXT_VERSION]}"
+
+        end
+
         build_android_app(
             task: ENV["BUILD_TASK"],
             build_type: ENV["BUILD_TYPE"],
@@ -41,6 +50,7 @@ platform :android do
                 "android.injected.signing.key.alias" => "#{ENV["ALIAS"]}",
                 "android.injected.signing.key.password" => "#{ENV["ALIAS_PW"]}",
                 "versionCode" => ENV["CI_PIPELINE_ID"],
+                "versionName" => "#{lane_context[SharedValues::RELEASE_NEXT_VERSION]}"
             }
         )
     end
@@ -70,8 +80,6 @@ platform :android do
                 merge_commit_filtering: "exclude_merges"
             )
 
-            puts "Uploading new version(#{ENV["CI_PIPELINE_ID"]}) to Firebase"
-
             firebase_app_distribution(
                 app: ENV["FIREBASE_APP_ID"],
                 groups: ENV["FIREBASE_TESTER_GROUP_NAME"],
@@ -80,7 +88,9 @@ platform :android do
                 release_notes: changes,
                 debug: true,
             )
+            tag_push(environment: ENV["CI_ENVIRONMENT_NAME"])
             success("Firebase")
+
         rescue  => exception
             on_error(exception)
             UI.user_error!(exception)
@@ -132,5 +142,14 @@ end
             shield_scale: "0.55",
             shield_gravity: "Center",
           )
+        end
+      end
+
+    private_lane :tag_push do |options|
+        if options[:environment] == "staging"
+        elsif options[:environment] =~ /prod/
+          next_version = "#{lane_context[SharedValues::RELEASE_NEXT_VERSION]}"
+          add_git_tag(tag: "v#{next_version}")
+          push_git_tags()
         end
       end

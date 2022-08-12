@@ -19,11 +19,12 @@ env:
   APP_VERSION_NAME: ${{ secrets.APP_VERSION_NAME }}
   FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID_STG }}
   CI_PIPELINE_ID: ${{ github.run_number }}
-  CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+  CI_COMMIT_BEFORE_SHA: ${{ github.sha }}
   APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
   BUILD_TASK: "assemble"
   BUILD_TYPE: "debug"
   CI_ENVIRONMENT_NAME: ${{ github.workflow }}
+  SEMVER: "true"
 
 jobs:
   staging_firebase:
@@ -36,6 +37,8 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/cache@v2
         with:
           path: |
