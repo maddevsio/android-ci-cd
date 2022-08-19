@@ -3,6 +3,9 @@
 [![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
 [![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
 
+#### README Languages
+* [Russian](docs/README_RU.md)
+
 Stop publishing your Android apps manually and start doing this in a fully automated fashion to any stage (test, beta, and prod).
 
 👇 Watch this 5 min explanation video to get deeper undertanding on the approach and benefits 👇
@@ -13,9 +16,9 @@ Stop publishing your Android apps manually and start doing this in a fully autom
 ## Advantages of this boilerplate
 
 * **Quick start CI/CD**: With this boilerplate, you can easily build the CI/CD for your android app based on Fastlane.
-* **Easy adaptation to external CI/CD tools**: We use GitLab-ci or GitHub actions as the executor of Fastlane commands and the construction of the workflow.. 
-* **Notification**: Pipeline operation Slack notifications, notifications about successful operations or errors in the pipeline process.  
-* **No special build machine setup is required**: We build the application inside a docker container with all the dependencies installed; this provides portability and the ability to use standard GitHub agents or GitLab runners. 
+* **Easy adaptation to external CI/CD tools**: We use GitLab-ci or GitHub actions as the executor of Fastlane commands and the construction of the workflow.
+* **Notification**: Pipeline operation Slack notifications, notifications about successful operations or errors in the pipeline process.
+* **No special build machine setup is required**: We build the application inside a docker container with all the dependencies installed; this provides portability and the ability to use standard GitHub agents or GitLab runners.
 
 ## CI/CD 
 
@@ -44,7 +47,7 @@ Stop publishing your Android apps manually and start doing this in a fully autom
 * Step descriptions
 
 ```
-  - build base image                - Step for build base image which used for build application. 
+  - build base image                - Step for build base image which used for build application.
   - tests and lints                 - Step for run tests and lints.
   - build and deploy to firebase    - Step for build and deploy application to Firebase.
   - build and deploy to google play - Step for build and deploy application and Google Play.
@@ -74,15 +77,15 @@ Because of it, we have to build several builds.
   * This gem helps to add a badge to your Android app icon.
   * More info [here](https://docs.fastlane.tools/actions/badge/)
   * You can always configure it for your project, but here are examples of how we did it.
- 
+
        ![staging](docs/badge_staging.png) ![prod](docs/badge_prod.png)
 
 ### Tools and services
 
 * [Fastlane](https://fastlane.tools/) - Fastlane is a tool for iOS and Android developers to automate tedious tasks like generating screenshots, dealing with provisioning profiles, and releasing your application.
-* [GitLab-ci](https://docs.gitlab.com/ee/ci/) or [GitHub Actions](https://docs.github.com/en/actions)  - CI/CD systems are used to build the pipeline logic and to execute Fastlane lanes.
-* [docker](https://www.docker.com/) - Docker is used as the build environment for the application         
-* [CGP](https://cloud.google.com/) 
+* [GitLab-ci](https://docs.gitlab.com/ee/ci/) or [GitHub Actions](https://docs.github.com/en/actions) - CI/CD systems are used to build the pipeline logic and to execute Fastlane lanes.
+* [docker](https://www.docker.com/) - Docker is used as the build environment for the application.
+* [CGP](https://cloud.google.com/)
   * [Firebase](https://firebase.google.com/docs/app-distribution) - Testing environment for the application.
   * [Google Play](https://play.google.com/console/about/) - Production environment for the application.
 
@@ -94,26 +97,26 @@ Because of it, we have to build several builds.
 
 ```commandline
 .
-├── app               - Folder which contains example application
-│   ├── build.gradle  - File for android project configuration 
-│   └── src      
-├── build.gradle    
-├── Dockerfile        - Dockerfile for base image which used in build step
-├── docs              - Folder for documentation
-├── fastlane          - Folder with fastlane configuration
-│   ├── Appfile       - File for main fastlane configuration 
-│   ├── Fastfile      - File for configuration fastlane actions
-│   └── Pluginfile    - File for configuration fastlane dependencies
-├── Gemfile                
-├── gradle                  - Folder for gradle build tool 
-├── gradle.properties       - File for gradle configuration
+├── app                    - Folder which contains example application
+│   ├── build.gradle       - File for android project configuration
+│   └── src
+├── build.gradle
+├── Dockerfile             - Dockerfile for base image which used in build step
+├── docs                   - Folder for documentation
+├── fastlane               - Folder with fastlane configuration
+│   ├── Appfile            - File for main fastlane configuration
+│   ├── Fastfile           - File for configuration fastlane actions
+│   └── Pluginfile         - File for configuration fastlane dependencies
+├── Gemfile
+├── gradle                 - Folder for gradle build tool
+├── gradle.properties      - File for gradle configuration
 ├── gradlew
 ├── gradlew.bat
 ├── ic_launcher-web.png
 ├── libs
 ├── proguard-project.txt
 ├── project.properties
-├── README.md              
+├── README.md
 └── settings.gradle        - File for graddle setting
 ```
 
@@ -135,7 +138,7 @@ Because of it, we have to build several builds.
 
 2. Service account with access to Firebase
     * Create Service Account for the release application to Firebase
-      > Choose your Firebase account --> Project Overview --> Project setting --> Service Account --> create service account 
+      > Choose your Firebase account --> Project Overview --> Project setting --> Service Account --> create service account
     * Add SA key encoded to base64 to an environment variable.
       ```bash
       base64 sa.json > key_firebase
@@ -221,7 +224,7 @@ GitLab --> Deployments --> Environment --> New Environment
     ```
     GitHub --> Settings --> Secrets --> Actions --> New repository secret
     ```
-    > In the key field paste `KEYSTORE` in the value field paste your signing key encoded to base64.
+    > In the key field paste `KEYSTORE` in the value field paste your `my-release-key.keystore` encoded to base64.
 
 ##### Environment variables
 
@@ -254,4 +257,4 @@ GitLab --> Deployments --> Environment --> New Environment
 
 #### Configuration plugins for Fastlane
 
-* We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use `fastlane-plugin-firebase_app_distribution` and `fastlane-plugin-badge`
+* We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use [fastlane-plugin-firebase_app_distribution](https://github.com/fastlane/fastlane-plugin-firebase_app_distribution) and [fastlane-plugin-badge](https://github.com/HazAT/fastlane-plugin-badge)
