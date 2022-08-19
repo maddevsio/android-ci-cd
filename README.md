@@ -3,7 +3,7 @@
 [![Developed by Mad Devs](https://maddevs.io/badge-dark.svg)](https://maddevs.io?utm_source=github&utm_medium=madboiler)
 [![License](https://img.shields.io/github/license/maddevsio/android-ci-cd)](https://github.com/maddevsio/android-ci-cd/blob/main/LICENSE.md)
 
-### README Languages
+#### README Languages
 * [Russian](docs/README_RU.md)
 
 Stop publishing your Android apps manually and start doing this in a fully automated fashion to any stage (test, beta, and prod).

@@ -38,7 +38,7 @@
 
 * Эта диаграмма описывает процесс, который мы используем
 
-![flow](docs/android-ci-cd-CI-CD-flow.drawio.svg)
+![flow](./android-ci-cd-CI-CD-flow.drawio.svg)
 
 * Описание этапов
 
@@ -74,7 +74,7 @@
   * Более подробная информация [здесь](https://docs.fastlane.tools/actions/badge/)
   * Вы всегда можете настроить его для своего проекта, вот примеры того, как это используем мы
 
-        ![staging](docs/badge_staging.png) ![prod](docs/badge_prod.png)
+        ![staging](./badge_staging.png) ![prod](./badge_prod.png)
 
 ### Инструменты и сервисы
 
@@ -87,7 +87,7 @@
 
 ### Описание основных компонентов
 
-![main](docs/android-ci-cd-tools.drawio.svg)
+![main](./android-ci-cd-tools.drawio.svg)
 
 ### Структура репозитория
 
@@ -139,7 +139,7 @@
       ```
 
 3. Сервис аккаунт с доступом к Google Play
-    * Создайте сервис аккаунт для загрузки приложения в [Google Play](docs/README_GOOGLE_PLAY.md)
+    * Создайте сервис аккаунт для загрузки приложения в [Google Play](./README_GOOGLE_PLAY.md)
     * Добавьте ключ сервис аккаунта(SA), закодированный в base64, в переменную окружения
       ```bash
       base64 google_play.json > google_play
