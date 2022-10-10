@@ -8,7 +8,7 @@
 
 Stop publishing your Android apps manually and start doing this in a fully automated fashion to any stage (test, beta, and prod).
 
-👇 Watch this 5 min explanation video to get deeper undertanding on the approach and benefits 👇
+👇 Watch this 5 min explanation video to get a deeper understanding of the approach and benefits 👇
 [![Android CI CD](https://img.youtube.com/vi/poSugKUtBPU/0.jpg)](https://youtu.be/poSugKUtBPU)
 
 ---
