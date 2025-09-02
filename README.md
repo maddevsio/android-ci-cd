@@ -258,3 +258,6 @@ GitLab --> Deployments --> Environment --> New Environment
 #### Configuration plugins for Fastlane
 
 * We have `Pluginfile` in this file we can configure plugins for Fastlane, by default we use [fastlane-plugin-firebase_app_distribution](https://github.com/fastlane/fastlane-plugin-firebase_app_distribution) and [fastlane-plugin-badge](https://github.com/HazAT/fastlane-plugin-badge)
+
+
+<!-- Security scan triggered at 2025-09-02 02:02:48 -->
